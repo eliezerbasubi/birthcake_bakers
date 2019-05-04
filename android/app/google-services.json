@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "865601277952",
+    "firebase_url": "https://cakeapp-a3433.firebaseio.com",
+    "project_id": "cakeapp-a3433",
+    "storage_bucket": "cakeapp-a3433.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:865601277952:android:8224e70820c4bf4f",
+        "android_client_info": {
+          "package_name": "com.example.birthcakebakers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "865601277952-20iq0t1lm1c04t6ii6osebc216l6v9v5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.birthcakebakers",
+            "certificate_hash": "eb4cb9010fa24f59dded5c8466f3e705f938bdf9"
+          }
+        },
+        {
+          "client_id": "865601277952-0smhqgqn0voq8r27da0jejnbhqj9n59e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsdncTylTM3ajsCscjOfjG6hft5T-pWL8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "865601277952-0smhqgqn0voq8r27da0jejnbhqj9n59e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
