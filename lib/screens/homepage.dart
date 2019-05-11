@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
       //   scrollController.jumpTo(minScreen * 4);
       // }
 
-      scrollController.position.moveTo(750);
+      // scrollController.position.moveTo(750);
       
     });
 

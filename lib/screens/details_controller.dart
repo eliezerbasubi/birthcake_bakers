@@ -230,8 +230,8 @@ class _DetailsControllerState extends State<DetailsController> {
     }
 
     void moreBadge() {
-      // setState(() {
-      //   counter = 1;
+      setState(() {
+        counter = 1;
       //   detailProduct.add(
       //     Model(
       //         name: data[index].name,
@@ -258,7 +258,7 @@ class _DetailsControllerState extends State<DetailsController> {
 
       //     if (!distinct) {}
       //   }
-      // });
+      });
     }
 
     final addToCart = Padding(
@@ -266,6 +266,7 @@ class _DetailsControllerState extends State<DetailsController> {
         child: Material(
           elevation: 7.0,
           borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          color: Theme.of(context).accentColor,
           child: MaterialButton(
             onPressed: () {
               moreBadge();
@@ -273,7 +274,7 @@ class _DetailsControllerState extends State<DetailsController> {
             child: Text(
               "Add to cart",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18.0),
+              style: TextStyle(fontSize: 18.0, color: Colors.white),
             ),
             height: 50.0,
             elevation: 8.0,
@@ -521,6 +522,7 @@ class _DetailsControllerState extends State<DetailsController> {
                                       imageUrl: productImage != null ? productImage : defaultImage,
                                       fit: BoxFit.cover,
                                       width: 180,
+                                      height: 120,
                                     ),
                                   )),
                         ),
@@ -892,7 +894,6 @@ class _DetailsControllerState extends State<DetailsController> {
                                               return ListTile(
                                                 leading: CircleAvatar(
                                                   radius: 30,
-                                                  minRadius: 25,
                                                   backgroundImage: CachedNetworkImageProvider(
                                                     snapshot.data.documents[index].data["userProfile"],
                                                   ),

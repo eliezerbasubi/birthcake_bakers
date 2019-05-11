@@ -99,8 +99,8 @@ class _OrderMapsState extends State<OrderMaps> {
   }
 
   getInitialDistance(){
-    var lat1 = customerPosition.latitude, lat2 = 0.2846263;
-      var lon1 = customerPosition.longitude, lon2 = 32.6565395;
+    var lat1 = 0.28462635, lat2 = 0.2846263;
+      var lon1 = 32.6565395, lon2 = 32.6565395;
      double theta = lon1 - lon2;
      initDist = sin(LocalMethods.deg2rad(lat1)) * sin(LocalMethods.deg2rad(lat2)) + cos(LocalMethods.deg2rad(lat1)) 
                     * cos(LocalMethods.deg2rad(lat2)) * cos(LocalMethods.deg2rad(theta));
@@ -357,7 +357,7 @@ class _OrderMapsState extends State<OrderMaps> {
 
     //Refresh distance and arrival status everytime it is changed
     // if(isLocationEnabled)
-    distance = LocalMethods.distanceInKm(customerPosition.latitude, 0.2846263, customerPosition.longitude,32.6065395);
+    distance = LocalMethods.distanceInKm(0.2846263, 0.2846263, 0.2846263,32.6065395);
     
     arrivalStatus();
 

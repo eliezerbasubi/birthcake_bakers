@@ -37,8 +37,8 @@ class LocalMethods {
   //Driver current position
   static distanceInKm(clientLat, driverLat, clientLong, driverLong){
       // var R = 6371; // km
-      var lat1 = clientLat, lat2 = driverLat;
-      var lon1 = clientLong, lon2 = driverLong;
+      var lat1 = 0.2846263, lat2 = 0.2846263;
+      var lon1 = 32.6065395, lon2 = 32.6565395;
      double theta = lon1 - lon2;
      dist = sin(deg2rad(lat1)) * sin(deg2rad(lat2)) + cos(deg2rad(lat1)) 
                     * cos(deg2rad(lat2)) * cos(deg2rad(theta));
