@@ -223,11 +223,11 @@ class _DetailsControllerState extends State<DetailsController> {
     // var index = widget.keyTitle;
     initVariables();
 
-    if(documentSnapshot ==null || snapshotReviews ==null || numberOfReviews ==null || userDetailsReview ==null){
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+    // if(documentSnapshot ==null || snapshotReviews ==null || numberOfReviews ==null || userDetailsReview ==null){
+    //   return Center(
+    //     child: CircularProgressIndicator(),
+    //   );
+    // }
 
     void moreBadge() {
       setState(() {

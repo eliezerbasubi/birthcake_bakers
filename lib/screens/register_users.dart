@@ -1,3 +1,4 @@
+// import 'dart:async';
 import 'dart:io';
 
 import 'package:birthcake_bakers/screens/login.dart';
@@ -9,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// import 'package:image_crop/image_crop.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Register extends StatefulWidget {
@@ -37,7 +39,7 @@ class _RegisterState extends State<Register> {
 
   bool setObscureText = true, isObscureText = true;
 
-  File galleryFile;
+  File galleryFile,croppedFile;
   Map<String, dynamic> users = Map<String, dynamic>();
 
   @override
@@ -62,12 +64,19 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
+
+
     //Display images selected from gallery
     imageSelectorGallery() async {
       try {
         galleryFile = await ImagePicker.pickImage(
           source: ImageSource.gallery,
+          maxHeight: 400,
+          maxWidth: 400
         );
+        // croppedFile = await ImageCrop.cropImage().then((onValue){
+        //   print(onValue);
+        // });
       } catch (e) {}
       setState(() {});
     }

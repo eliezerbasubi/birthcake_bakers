@@ -36,7 +36,8 @@ class _PaymentState extends State<Payment> {
       showPaymentBox = false,
       canConfirm = false,
       isCachOnDelivery =false,
-      avoidDuplicates = false;
+      avoidDuplicates = false,
+      errorFetchingImage = false;
 
   int _currentIndex = 0, selectedType = 0, paySelected = 0;
   int indexController = 0; //Controls the number of time Next button is clicked.
@@ -77,7 +78,7 @@ class _PaymentState extends State<Payment> {
     Container(width: 40, height: 40,child: Image.asset("images/visa.png")),
     Container(width: 40, height: 40,child: Image.asset("images/american_express.png")),
     Container(width: 40, height: 40,child: Image.asset("images/discover.png")),
-    Container(width: 40, height: 40,child: Image.asset("images/discover.png")),
+    Container(width: 40, height: 40,child: Image.asset("images/handshake.png")),
   ];
 
   List<String> paymentTitle = [
@@ -494,7 +495,15 @@ class _PaymentState extends State<Payment> {
               ),
               trailing: CircleAvatar(
                 radius: 35,
-                backgroundImage: CachedNetworkImageProvider(userPicture),
+                backgroundImage: !errorFetchingImage ? CachedNetworkImageProvider(
+                  userPicture,
+                  errorListener: (){
+                    setState(() {
+                      // If image failed to load, show default image
+                     errorFetchingImage = true; 
+                    });
+                  }
+                  ) : Image.asset("images/avatar-user.login.jpg"),
               ),
             ),
 

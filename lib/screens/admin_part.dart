@@ -19,7 +19,7 @@ class _AdminPartState extends State<AdminPart> {
   String category;
   var now;
   List<String> categories = ["birthday", "romantic", "wedding"];
-  File galleryFile;
+  File galleryFile, croppedFile;
   Map<String, dynamic> products = new Map<String, dynamic>();
 
   String platformMessage = 'No Error';
@@ -42,8 +42,10 @@ class _AdminPartState extends State<AdminPart> {
     try {
       galleryFile = await ImagePicker.pickImage(
         source: ImageSource.gallery,
+        maxHeight: 400,
+        maxWidth: 400
       );
-      print("once from file $galleryFile");
+      // print("Image size ${galleryFile.lengthSync()}");
     } catch (e) {}
     setState(() {});
   }

@@ -1,12 +1,12 @@
 import 'dart:async';
-import 'dart:math';
+// import 'dart:math';
 
 import 'package:birthcake_bakers/database/database_handler.dart';
 import 'package:birthcake_bakers/models/local_methods.dart';
 import 'package:birthcake_bakers/chat/custom_chat.dart';
 import 'package:birthcake_bakers/tools/firebase_methods.dart';
 import 'package:birthcake_bakers/tools/my_strings.dart';
-// import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -59,28 +59,21 @@ class _OrderMapsState extends State<OrderMaps> {
     );
   
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  Timer _timer;
+  // Timer _timer;
   TextEditingController reviewController =TextEditingController();
 
   @override
   void initState() {
     super.initState();
 
-    // mapController = MapController();
-
-    getCurrentLocation().then((position){
-      userLocation = position;
-    });
-
     currentLocationStream();
     currentUserProfile();
     // if (isLocationEnabled) 
-    distance = LocalMethods.distanceInKm(customerPosition?.latitude, 0.2846263, customerPosition?.longitude,32.6565395);
+    // distance = LocalMethods.distanceInKm(customerPosition?.latitude, 0.2846263, customerPosition?.longitude,32.6565395);
     
-    LocalMethods.estimatedTime();
+    // LocalMethods.estimatedTime();
 
     //set initial distance, in order to evaluate delivery process
-    getInitialDistance();
     initDBComponents();
   }
 
@@ -98,219 +91,36 @@ class _OrderMapsState extends State<OrderMaps> {
    }
   }
 
-  getInitialDistance(){
-    var lat1 = 0.28462635, lat2 = 0.2846263;
-      var lon1 = 32.6565395, lon2 = 32.6565395;
-     double theta = lon1 - lon2;
-     initDist = sin(LocalMethods.deg2rad(lat1)) * sin(LocalMethods.deg2rad(lat2)) + cos(LocalMethods.deg2rad(lat1)) 
-                    * cos(LocalMethods.deg2rad(lat2)) * cos(LocalMethods.deg2rad(theta));
-      initDist = acos(initDist);
-      initDist = LocalMethods.rad2deg(initDist);
-      initDist = initDist * 60 * 1.1515;
-      // if (unit == 'K') {
-        initDist = initDist * 1.609344;
-      return (initDist.toStringAsFixed(2));
-  }
-
-  arrivalStatus(){
-    // setState(() {
-     var dist = double.parse(distance);
-      var initial = double.parse(getInitialDistance());
-      //the real or initial distance between driver and customer
-      if (dist == initial || dist > (initial / 2)) {
-        status = Strings.onMyWay;
-      } else if(dist == (initial / 2)) {
-        status = Strings.almostThere;
-      }else if(dist < 1.500 && dist > 0.50){
-        status = Strings.closeToYou;
-      }else {
-        status = Strings.alreadyThere;
-      }
-      print("The get initial distance is $initial and distance $distance"); 
-
-      if(status == Strings.alreadyThere){
-       _timer =  Timer(Duration(seconds: 5), (){
-          scaffoldKey.currentState.showBottomSheet((context){
-            return Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0))
-              ),
-              child: ListView(
-                    shrinkWrap: true,
-                    children: <Widget>[
-                      Container(
-                        child: Column(
-                          children: <Widget>[
-                            Visibility(
-                              visible: showRating,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                                child: Align(
-                                  alignment: Alignment.topRight,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.black
-                                    ),
-                                    child: InkWell(
-                                      onTap: (){
-                                        Navigator.pop(context);
-                                      },
-                                      child: Icon(Icons.clear, color: Colors.white,))),
-                                ),
-                              ),
-                            ),
-                            Icon(Icons.check_circle_outline, color: Colors.lightGreen, size: 120,),
-                            Text(delivery, style: TextStyle(color: Colors.black, fontSize: 20, fontFamily: "Hind Regular", fontWeight: FontWeight.bold),),
-                            SizedBox(height: 20,),
-                            
-                          ],
-                        ),
-                      ),
-
-                      Visibility(
-                        visible: hideBtnDelivery,
-                        child: RaisedButton(
-                          color: Colors.blue[900],
-                          // materialTapTargetSize: MaterialTapTargetSize.padded,
-                          padding: EdgeInsets.all(10.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0)
-                          ),
-                          child: Text("Confirm delivery", style: TextStyle(color: Colors.white),),
-                          onPressed: (){
-                            setState(() {
-                              delivery = Strings.delivered; 
-                              txtDelivery = Strings.rateTxt;
-                              showRating = !showRating;
-                              hideBtnDelivery = !hideBtnDelivery; 
-
-                             updateShippingStatus(); 
-                            });
-                          },
-                    ),
-                  ),
-
-                    Container(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text(txtDelivery,
-                      style: TextStyle(color: Colors.grey,fontStyle: FontStyle.italic), textAlign: TextAlign.center, overflow: TextOverflow.clip,),
-                    ),
-
-                      //Toggle product rating
-                      Visibility(visible: showRating,
-                      child: Column(children: <Widget>[
-                        Text("Rate this product"),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(Icons.star, color: Colors.yellow),
-                            Icon(Icons.star, color: Colors.yellow),
-                            Icon(Icons.star, color: Colors.yellow),
-                            Icon(Icons.star, color: Colors.yellow),
-                            Icon(Icons.star, color: Colors.yellow),
-                          ],
-                        ),
-                        
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            controller: reviewController,
-                            validator: (txt){
-                              if(txt.isEmpty){
-                                return "Write down something";
-                              }
-                            },
-                            decoration: InputDecoration(
-                              hintText: "Say something about the product",
-                             ),
-                          ),
-                        ),
-
-                        RaisedButton(
-                          color: Colors.blue[900],
-                          child: Text("Submit", style: TextStyle(color: Colors.white),),
-                          onPressed: (){
-                            review = reviewController.text;
-
-                            if (review.isNotEmpty) {
-                              reviewController.clear();
-
-                               //Add review to products ordered
-                              //check for duplicates before inputting reviews
-                              // FirebaseHandler.doesUserAlreadyRewiew(userID,"-LZwLlYqXn8ZGiZcmlhx").then((valid){
-                              //     userHasReviewed = valid;
-
-                              //     if(userHasReviewed){
-                              //       print("Has reviewed this product $userHasReviewed");
-                              //     }
-                              // });
-                            }else{
-                              print("review is empty");
-                            }
-                            
-                          },
-                        ),
-                      ],),
-                      ),
-                    ],
-                  ),
-            );
-          }).closed.whenComplete((){
-            if(mounted){
-              _timer.cancel();
-            }
-          });
-        });
-      }
-    // });
-
-    // return status;
-  }
-
-  Future<Map<String, double>> getCurrentLocation() async {
-    var currentLocation = <String, double>{};
-    try {
-      currentLocation = await location.getLocation();
-      isLocationEnabled = await location.hasPermission();
-
-      if(isLocationEnabled){
-        customerPosition = LatLng(currentLocation["latitude"], currentLocation["longitude"]);
-        distance = LocalMethods.distanceInKm(customerPosition.latitude, 0.2846263, customerPosition.longitude,32.6565395);
-      }else{
-        //Will be  replaced or deleted later
-        customerPosition = LatLng(0.2846263, 32.6565395);
-      }
-      //Just for now set manually driver position as we don't have any database to handle his position
-      driverPosition = LatLng(0.2846263, 32.6565395);
-
-      _kGooglePlex = CameraPosition(
-          target: customerPosition,
-          zoom: 14.4746,
-        );
-  
-    } catch (e) {
-      currentLocation = null;
-    }
-    return currentLocation;
-  }
-
-
   void currentLocationStream(){
     location.onLocationChanged().listen((value) {
          currentLocation = value; 
          customerPosition = LatLng(currentLocation["latitude"], currentLocation["longitude"]);
 
-          //Refresh distance everytime it is changed
-        distance = LocalMethods.distanceInKm(customerPosition.latitude, 0.2846263, customerPosition.longitude,32.6565395);
+          // Let's pass the distance returned from distanceInKm method into a variable distance
+          // distance = LocalMethods.distanceInKm(customerPosition.latitude, 0.2846263, customerPosition.longitude,32.6565395);
+          // print("the distance is $distance");
+
+          //Let's Update the camera each time the position changes
+          _kGooglePlex = CameraPosition(
+            target: customerPosition,
+            zoom: 14.4746,
+          );
       });
-      //if current position equals to old position after 10min, alert,i was in jam
     
+    // Let's call changing distance method to update the distance when the app first runs
+    // Then reload the UI
+    setState(() {
+     changingDistance(); 
+    });
   }
-  
+
+  // Let's create a method which changes the distance between driver and customer
+  void changingDistance(){
+    if (customerPosition != null){
+      distance = LocalMethods.distanceInKm(customerPosition.latitude, 0.2846263, customerPosition.longitude,32.6565395);
+    }
+  }
+
   void currentUserProfile(){
     FirebaseAuth.instance.currentUser().then((userInfo){
       setState(() {
@@ -355,30 +165,27 @@ class _OrderMapsState extends State<OrderMaps> {
   @override
   Widget build(BuildContext context) {
 
-    //Refresh distance and arrival status everytime it is changed
-    // if(isLocationEnabled)
-    distance = LocalMethods.distanceInKm(0.2846263, 0.2846263, 0.2846263,32.6065395);
-    
-    arrivalStatus();
+    //Refresh distance and arrival status everytime the UI changes
+    changingDistance();
 
     return Scaffold(
       key: scaffoldKey,
       body: SafeArea(
         child: Container(
           child: 
-          // !isLocationEnabled ? Container(
-          //   child: Column(
-          //     mainAxisAlignment: MainAxisAlignment.center,
-          //     crossAxisAlignment: CrossAxisAlignment.center,
-          //     children: <Widget>[
-          //       Icon(Icons.location_off, size: 54,color: Colors.grey,),
-          //       Text("Unable to load map,\n Please go to Settings -> Location -> then switch it on",
-          //         textAlign: TextAlign.center,
-          //       )
-          //     ],
-          //   ),
-          // )
-          // :
+          customerPosition == null ? Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.location_off, size: 54,color: Colors.grey,),
+                Text("Unable to load map,\n Please go to Settings -> Location -> then switch it on",
+                  textAlign: TextAlign.center,
+                )
+              ],
+            ),
+          )
+          :
           
           Column(
             children: <Widget>[ 
@@ -411,7 +218,6 @@ class _OrderMapsState extends State<OrderMaps> {
                         )
                       },
                     ),
-                
                 ),
 
                 Card(
@@ -439,9 +245,9 @@ class _OrderMapsState extends State<OrderMaps> {
                           ],),
                         ),
                         ListTile(
-                          leading: Image.asset("images/profile.jpg", width:40, height: 40, fit:BoxFit.cover),
-                          title: Text("Basubi Wikululya", overflow:TextOverflow.ellipsis),
-                          subtitle: Text(status),//status : getting ready to come, i'm on my way, i'm almost there, where are you
+                          leading: CachedNetworkImage(imageUrl: userpicture,fit: BoxFit.cover,width:40, height: 40,),
+                          title: Text(username, overflow:TextOverflow.ellipsis),
+                          subtitle: Text(LocalMethods.arrivalStatus()),//status : getting ready to come, i'm on my way, i'm almost there, where are you
                           trailing: Column(
                             children: <Widget>[
                               InkWell(

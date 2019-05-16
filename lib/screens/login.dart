@@ -142,7 +142,7 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin{
           child: CircleAvatar(
           backgroundColor: Colors.transparent,
           radius: _animation.value * 70,
-          backgroundImage: AssetImage("images/images(8).jpg"),
+          backgroundImage: AssetImage("images/avatar-user-login.jpg"),
          
       ),
         ),       

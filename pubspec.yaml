@@ -40,8 +40,6 @@ dependencies:
   google_maps_flutter: ^0.3.0+2
     # path: ../google_maps_flutter
   
-
-  # geocoder: ^0.1.2
 #  geolocator:
 
   # flutter_multiple_image_picker: "^0.0.1"
@@ -82,6 +80,7 @@ flutter:
     - images/images(15).jpg
     - images/images(16).jpg
     - images/profile.jpg
+    - images/avatar-user-login.jpg
     - images/runner.png
     - images/house.png
     - images/empty.png

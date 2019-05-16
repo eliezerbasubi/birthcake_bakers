@@ -44,6 +44,7 @@ class _CartHistoryState extends State<CartHistory> {
 
   ScrollController _scrollController;
   ProductDatabase productDatabase =ProductDatabase();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   void initDBComponents() async{
    try {
@@ -52,6 +53,10 @@ class _CartHistoryState extends State<CartHistory> {
       
       setState(() {
         cachedList = cartList;
+
+        cachedList.forEach((elt){
+          quantity = elt.quantity;
+        });
 
         initValidateCart();
       });
@@ -180,6 +185,7 @@ class _CartHistoryState extends State<CartHistory> {
   Widget build(BuildContext context) {
    size = cartList.length;
     return Scaffold(
+      key: scaffoldKey,
       appBar: isAppBarVisible
           ? AppBar(
               title: Text("Cart History"),
@@ -255,7 +261,7 @@ class _CartHistoryState extends State<CartHistory> {
                                       Text("\$ ${cartList[index].price}",softWrap: true, style: TextStyle(fontFamily: "Hind-Regular", fontSize: 16, color: Colors.red),),
 
                                       //quantity counter
-                                      QuantityCounter(index: index,callback: callback, callbackDecrease: callbackDecrease)
+                                      QuantityCounter(index: index,dbQuantity: cartList[index].quantity,callback: callback, callbackDecrease: callbackDecrease)
                                       
                                     ],
                                   ),
@@ -279,7 +285,8 @@ class _CartHistoryState extends State<CartHistory> {
                                                 content: Text("${cartList[index].name} removed from cart"),)); 
                                                   
                                                   cartList.removeAt(index);  //Remove item
-                                                  callbackDecrease(index, quantity); //Dicrease quantity   
+                                                  callbackDecrease(index, quantity); //Dicrease quantity  
+                                                  totalAmount += cachedList[index].price; //Update total amount 
                                               });
                                                 
                                           });
@@ -343,6 +350,11 @@ class _CartHistoryState extends State<CartHistory> {
                           Navigator.push(
                             context,MaterialPageRoute( builder: (context) =>Payment()));
                         }
+                        // Toast a message if user does not select any product
+                        else{
+                           scaffoldKey.currentState.showSnackBar(new SnackBar(
+                          content: Text("No product selected"),));
+                        }
                         
                       },
                       child: Text(
@@ -365,10 +377,10 @@ class _CartHistoryState extends State<CartHistory> {
 }
 
 class QuantityCounter extends StatefulWidget {
-  final index;
+  final index, dbQuantity;
   final Function(int, int) callback, callbackDecrease;
 
-  QuantityCounter({this.index, this.callback, this.callbackDecrease});
+  QuantityCounter({this.index, this.dbQuantity, this.callback, this.callbackDecrease});
   @override
   _QuantityCounterState createState() => _QuantityCounterState();
 }
@@ -382,40 +394,43 @@ class _QuantityCounterState extends State<QuantityCounter> {
   ProductDatabase productDatabase =ProductDatabase(); 
 
 
-  void initDBComponents() async{
-   try {
-      cartList = await productDatabase.getProductsInCart();
-      size = cartList.length;
+  // void initDBComponents() async{
+  //  try {
+  //     cartList = await productDatabase.getProductsInCart();
+  //     size = cartList.length;
       
       
-      setState(() {
-        cachedList = cartList;
+  //     setState(() {
+  //       cachedList = cartList;
 
-        initComponents();
-      });
+  //       for (var i = 0; i < cachedList.length; i++) {
+  //         quantity = cachedList[i].quantity;
+  //         print("quantity on start is ${cachedList.length}");
+  //       }
+  //     });
       
-    } on Exception catch (e) {
-      print(e);
-    }
-  }
+  //   } on Exception catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   void initComponents(){
-    for (var i = 0; i < cachedList.length; i++) {
-      quantity = cachedList[i].quantity;
-    }
+    // for (var i = 0; i < cachedList.length; i++) {
+      quantity = widget.dbQuantity;
+    // }
   }
 
   @override
   void initState() {
-    initDBComponents();
-    productDatabase =ProductDatabase();
+    initComponents();
+    productDatabase = ProductDatabase();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // int quantity = data[widget.index].quantity;
+    // int quantity = widget.dbQuantity;
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -476,6 +491,7 @@ class _QuantityCounterState extends State<QuantityCounter> {
             if (quantity < 4) {
               setState(() {
                  widget.callback(widget.index, quantity++);
+                 print(quantity);
               });
              
             }
